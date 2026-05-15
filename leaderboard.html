@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="css/style.css">
+<h1>Leaderboard</h1>
+
+<div id="board"></div>
+
+<script>
+fetch("php/leaderboard.php")
+.then(res => res.json())
+.then(data => {
+
+    let html = "";
+
+    data.forEach((u, i) => {
+        html += `
+            <p>
+                #${i + 1} ${u.username} - ${u.best_score}
+            </p>
+        `;
+    });
+
+    document.getElementById("board").innerHTML = html;
+});
+</script>

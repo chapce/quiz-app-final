@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Welcome to the Quiz App</h1>
+
+    <p>Test your knowledge and compete on the leaderboard.</p>
+
+    <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
+
+    <div style="margin-top:20px;">
+        <a href="quiz.html">Quiz</a> |
+        <a href="profile.html">Profile</a> |
+        <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+</div>
+
+<script>
+function startQuiz() {
+    window.location.href = "quiz.html";
+}
+</script>
+
+</body>
+</html>

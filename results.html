@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Quiz Results</h1>
+
+    <p id="score"></p>
+    <p id="message"></p>
+
+    <button class="btn-primary" onclick="window.location.href='quiz.html'">
+        Play Again
+    </button>
+
+    <div style="margin-top: 15px;">
+        <a href="profile.html">Profile</a> |
+        <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    let score = params.get("score");
+
+    if (score === null) {
+        score = 0;
+    }
+
+    score = parseInt(score);
+
+    document.getElementById("score").innerText =
+        `You got ${score} out of 10.`;
+
+    let message = "";
+
+    if (score >= 8) {
+        message = "Excellent work!";
+    } else if (score >= 5) {
+        message = "Good job!";
+    } else {
+        message = "Better luck next time!";
+    }
+
+    document.getElementById("message").innerText = message;
+
+    fetch("php/saveResult.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            score: score,
+            total: 10
+        })
+    });
+</script>
+
+</body>
+</html>

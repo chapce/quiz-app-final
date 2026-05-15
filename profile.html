@@ -1,0 +1,32 @@
+<h1>Your Quiz History</h1>
+
+<div id="history"></div>
+
+ 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const userId = localStorage.getItem("user_id");
+
+    console.log("USER ID:", userId);
+
+    fetch(`http://localhost:8888/quiz-app/php/getHistory.php?user_id=${userId}`)
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("History:", data);
+
+            let html = "";
+
+            if (!data.length) {
+                html = "<p>No history found</p>";
+            } else {
+                data.forEach(row => {
+                    html += `<p>${row.score}/${row.total} - ${row.played_at}</p>`;
+                });
+            }
+
+            document.getElementById("history").innerHTML = html;
+        });
+});
+</script>

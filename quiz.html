@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Quiz</h1>
+
+    <p id="progress"></p>
+
+    <div id="quiz-container"></div>
+
+</div>
+
+<script>
+
+let questions = [];
+let currentQuestion = 0;
+let score = 0;
+
+async function loadQuestions() {
+
+    console.log("quiz loaded");
+
+    const response = await fetch("questions.json");
+    questions = await response.json();
+
+    questions.sort(() => Math.random() - 0.5);
+    questions = questions.slice(0, 10);
+
+    loadQuestion();
+}
+
+function loadQuestion() {
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("progress").innerText =
+        `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    const container = document.getElementById("quiz-container");
+
+    container.innerHTML = `
+        <h2>${q.question}</h2>
+
+        <button onclick="checkAnswer('A')">A: ${q.A}</button>
+        <button onclick="checkAnswer('B')">B: ${q.B}</button>
+        <button onclick="checkAnswer('C')">C: ${q.C}</button>
+        <button onclick="checkAnswer('D')">D: ${q.D}</button>
+    `;
+}
+
+function checkAnswer(selected) {
+
+    if (selected === questions[currentQuestion].answer) {
+        score++;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+
+    fetch("php/saveScore.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            score: score,
+            total: questions.length
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("saved:", data);
+        window.location.href = "results.html?score=" + score;
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = "results.html?score=" + score;
+    });
+}
+
+window.onload = loadQuestions;
+
+</script>
+
+</body>
+</html>
